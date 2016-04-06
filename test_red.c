@@ -28,12 +28,16 @@ char *call_red(char *args, int arglen) {
 
 void test_nothing_w_no_args() {
     char args[] = "";
-    assert(0 == strcmp(call_red(args, strlen(args)), "\n"));
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result, "\n"));
+    free(result);
 }
 
-void test_returns_one_int_one(){
+void test_returns_one_int_one() {
     char args[] = "test_files/one_int_one.txt";
-    assert(0 == strcmp(call_red(args, strlen(args)), "1\n"));
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "1\n"));
+    free(result);
 }
 
 int main() {
