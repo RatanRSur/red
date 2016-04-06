@@ -32,16 +32,33 @@ void test_nothing_w_no_args() {
     free(result);
 }
 
-void test_returns_one_int_one() {
-    char args[] = "test_files/one_int_one.txt";
+void test_one_int() {
+    char args[] = "test_files/one_int.txt";
     char *result = call_red(args, strlen(args));
     assert(0 == strcmp(result , "1\n"));
     free(result);
 }
 
+void test_two_ints() {
+    char args[] = "test_files/two_ints.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "7\n"));
+    free(result);
+}
+
+void test_five_ints() {
+    char args[] = "test_files/five_ints.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "15\n"));
+    free(result);
+}
+
+
 int main() {
     run_test(test_nothing_w_no_args);
-    run_test(test_returns_one_int_one);
+    run_test(test_one_int);
+    run_test(test_two_ints);
+    run_test(test_five_ints);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }

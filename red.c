@@ -13,7 +13,9 @@ int main(int argc, char **argv) {
         int sum = fscanf(fp, "%d ", &sum);
 
         while (!feof(fp)) {
-            sum += fscanf(fp, "%d ", &sum);
+            int current;
+            fscanf(fp, "%d ", &current);
+            sum += current;
         }
 
         fclose(fp);
