@@ -11,19 +11,18 @@
 
 char *call_red(char *args, int arglen) {
     char bin[] = "./bin/red ";
-    char *command = (char *) calloc(sizeof(bin) + arglen, sizeof(char));
+    char *command = (char *) calloc(strlen(bin) + arglen + 1, sizeof(char));
     strcpy(command, bin);
     strcat(command, args);
     FILE *fp;
     fp = popen(command, "r");
     free(command);
     exit_if_null(fp);
-
-    char *lineptr = NULL;
+    char *line = NULL;
     size_t len = 0;
-    getline(&lineptr, &len, fp);
+    getline(&line, &len, fp);
     pclose(fp);
-    return lineptr;
+    return line;
 }
 
 void test_nothing_w_no_args() {
