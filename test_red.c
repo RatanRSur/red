@@ -59,12 +59,20 @@ void test_funky_line_breaks() {
     free(result);
 }
 
+void test_empty_file() {
+    char args[] = "test_files/empty.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "0\n"));
+    free(result);
+}
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
     run_test(test_two_ints);
     run_test(test_five_ints);
     run_test(test_funky_line_breaks);
+    run_test(test_empty_file);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
