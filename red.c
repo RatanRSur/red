@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
         strcpy(filename, argv[1]);
         FILE *fp = fopen(filename, "r");
         free(filename);
-        int sum = fscanf(fp, "%d ", &sum);
+        int sum = 0;
 
         while (!feof(fp)) {
             int current;
