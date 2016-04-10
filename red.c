@@ -4,22 +4,25 @@
 #include <stdint.h>
 
 int main(int argc, char **argv) {
-    if (2 == argc) {
-        // open file if supplied as argument
-        char *filename = (char *) calloc(strlen(argv[1]) + 1, 1);
-        exit_if_null(filename);
-        strcpy(filename, argv[1]);
-        FILE *fp = fopen(filename, "r");
-        free(filename);
+    if (argc > 1) {
         int64_t sum = 0;
 
-        while (!feof(fp)) {
-            int64_t current;
-            fscanf(fp, "%lld ", &current);
-            sum += current;
+        for (int i = 1; i < argc; ++i) {
+            char *filename = (char *) calloc(strlen(argv[i]) + 1, 1);
+            exit_if_null(filename);
+            strcpy(filename, argv[i]);
+            FILE *fp = fopen(filename, "r");
+            free(filename);
+
+            while (!feof(fp)) {
+                int64_t current;
+                fscanf(fp, "%lld ", &current);
+                sum += current;
+            }
+
+            fclose(fp);
         }
 
-        fclose(fp);
         printf("%lld", sum);
     }
 

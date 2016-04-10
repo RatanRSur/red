@@ -80,6 +80,13 @@ void test_negative_ints() {
     free(result);
 }
 
+void test_two_files() {
+    char args[] = "test_files/file1.txt test_files/file2.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "0\n"));
+    free(result);
+}
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
@@ -89,6 +96,7 @@ int main() {
     run_test(test_empty_file);
     run_test(test_large_ints);
     run_test(test_negative_ints);
+    run_test(test_two_files);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
