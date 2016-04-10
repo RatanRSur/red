@@ -73,6 +73,13 @@ void test_large_ints() {
     free(result);
 }
 
+void test_negative_ints() {
+    char args[] = "test_files/negative_ints.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "-27\n"));
+    free(result);
+}
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
@@ -81,6 +88,7 @@ int main() {
     run_test(test_funky_line_breaks);
     run_test(test_empty_file);
     run_test(test_large_ints);
+    run_test(test_negative_ints);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
