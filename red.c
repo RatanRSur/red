@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.c"
+#include <stdint.h>
 
 int main(int argc, char **argv) {
     if (2 == argc) {
@@ -10,16 +11,16 @@ int main(int argc, char **argv) {
         strcpy(filename, argv[1]);
         FILE *fp = fopen(filename, "r");
         free(filename);
-        int sum = 0;
+        int64_t sum = 0;
 
         while (!feof(fp)) {
-            int current;
-            fscanf(fp, "%d ", &current);
+            int64_t current;
+            fscanf(fp, "%lld ", &current);
             sum += current;
         }
 
         fclose(fp);
-        printf("%d", sum);
+        printf("%lld", sum);
     }
 
     printf("\n");

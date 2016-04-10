@@ -66,6 +66,13 @@ void test_empty_file() {
     free(result);
 }
 
+void test_large_ints() {
+    char args[] = "test_files/large_ints.txt";
+    char *result = call_red(args, strlen(args));
+    assert(0 == strcmp(result , "5000000000\n"));
+    free(result);
+}
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
@@ -73,6 +80,7 @@ int main() {
     run_test(test_five_ints);
     run_test(test_funky_line_breaks);
     run_test(test_empty_file);
+    run_test(test_large_ints);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
