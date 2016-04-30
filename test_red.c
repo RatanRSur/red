@@ -8,20 +8,25 @@
     printf("%s\n", #fn_name);\
     fn_name();
 
-char *call_red(char *args) {
+char *call_and_write_to_red(char *args, char *input) {
     char bin[] = "./bin/red ";
     char *command = (char *) calloc(strlen(bin) + strlen(args) + 1, sizeof(char));
     strcpy(command, bin);
     strcat(command, args);
-    FILE *fp;
-    fp = popen(command, "r+");
+    FILE *red_process;
+    red_process = popen(command, "r+");
     free(command);
-    exit_if_null(fp);
+    exit_if_null(red_process);
+    fputs(input, red_process);
     char *line = NULL;
     size_t len = 0;
-    getline(&line, &len, fp);
-    pclose(fp);
+    getline(&line, &len, red_process);
+    pclose(red_process);
     return line;
+}
+
+char *call_red(char *args) {
+    return call_and_write_to_red(args, "");
 }
 
 void test_nothing_w_no_args() {
