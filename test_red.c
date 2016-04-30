@@ -8,7 +8,7 @@
     printf("%s\n", #fn_name);\
     fn_name();
 
-char *call_red(char *args, int arglen) {
+char *call_red(char *args, uint64_t arglen) {
     char bin[] = "./bin/red ";
     char *command = (char *) calloc(strlen(bin) + arglen + 1, sizeof(char));
     strcpy(command, bin);
