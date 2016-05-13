@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
 #include "utils.c"
 
 #define run_test(fn_name)\
@@ -9,20 +10,49 @@
     fn_name();
 
 char *call_and_write_to_red(char *args, char *input) {
-    char bin[] = "./bin/red ";
-    char *command = (char *) calloc(strlen(bin) + strlen(args) + 1, sizeof(char));
-    strcpy(command, bin);
-    strcat(command, args);
-    FILE *red_process;
-    red_process = popen(command, "r+");
-    free(command);
-    exit_if_null(red_process);
-    fputs(input, red_process);
-    char *line = NULL;
-    size_t len = 0;
-    getline(&line, &len, red_process);
-    pclose(red_process);
-    return line;
+    int write_pipe[2];
+    int read_pipe[2];
+    pipe(write_pipe);
+    pipe(read_pipe);
+    pid_t pid = fork();
+    char buf[100];
+
+    if (pid) {
+        close(write_pipe[0]);
+        close(read_pipe[1]);
+        write(write_pipe[1], input, strlen(input) + 1);
+        close(write_pipe[1]);
+        read(read_pipe[0], buf, 10);
+        close(read_pipe[0]);
+    } else {
+        fputs("beginning of child\n", stderr);
+        close(write_pipe[1]);
+        close(read_pipe[0]);
+        dup2(write_pipe[0], 0);
+        dup2(read_pipe[1], 1);
+        char bin[] = "./bin/red ";
+        char *command = (char *) calloc(strlen(bin) + strlen(args) + 1, sizeof(char));
+        strcpy(command, bin);
+        strcat(command, args);
+        execlp(command, bin, (char *) NULL);
+        free(command);
+        fputs("end of child\n", stderr);
+        exit(0);
+    }
+    fputs("end of both\n", stderr);
+
+    int result_length = 1;
+    char *c = buf;
+    while(*c != '\n') {
+        ++c;
+        fprintf(stderr, "%c\n", *c);
+    }
+    ++c;
+    *c = '\0';
+
+    char *result = (char *) calloc(result_length + 1, sizeof(char));
+    strcpy(buf, result);
+    return result;
 }
 
 char *call_red(char *args) {
@@ -99,6 +129,13 @@ void test_product_option() {
     free(result);
 }
 
+/*void test_one_line_from_stdin() {*/
+/*char args[] = "test_files/five_ints.txt";*/
+/*char *result = call_and_write_to_red(args,"42\n");*/
+/*assert(0 == strcmp(result , "42\n"));*/
+/*free(result);*/
+/*}*/
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
@@ -110,6 +147,7 @@ int main() {
     run_test(test_negative_ints);
     run_test(test_two_files);
     run_test(test_product_option);
+    /*run_test(test_one_line_from_stdin);*/
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
