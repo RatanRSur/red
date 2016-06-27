@@ -9,13 +9,15 @@
     printf("%s\n", #fn_name);\
     fn_name();
 
-char *call_and_write_to_red(char *args, char *input) {
+char red_binary[] = "./bin/red";
+
+char *call_and_write_to_red(char *const *args, const char *input) {
     int write_pipe[2];
     int read_pipe[2];
     pipe(write_pipe);
     pipe(read_pipe);
-    pid_t pid = fork();
     char buf[100];
+    pid_t pid = fork();
 
     if (pid) {
         close(write_pipe[0]);
@@ -25,112 +27,95 @@ char *call_and_write_to_red(char *args, char *input) {
         read(read_pipe[0], buf, 10);
         close(read_pipe[0]);
     } else {
-        fputs("beginning of child\n", stderr);
         close(write_pipe[1]);
         close(read_pipe[0]);
-        dup2(write_pipe[0], 0);
         dup2(read_pipe[1], 1);
-        char bin[] = "./bin/red ";
-        char *command = (char *) calloc(strlen(bin) + strlen(args) + 1, sizeof(char));
-        strcpy(command, bin);
-        strcat(command, args);
-        execlp(command, bin, (char *) NULL);
-        free(command);
-        fputs("end of child\n", stderr);
+        dup2(write_pipe[0], 0);
+        execvp(red_binary, args);
         exit(0);
     }
-    fputs("end of both\n", stderr);
 
-    int result_length = 1;
-    char *c = buf;
-    while(*c != '\n') {
-        ++c;
-        fprintf(stderr, "%c\n", *c);
-    }
-    ++c;
-    *c = '\0';
-
-    char *result = (char *) calloc(result_length + 1, sizeof(char));
-    strcpy(buf, result);
+    char *result = (char *) calloc(strlen(buf) + 1, sizeof(char));
+    strcpy(result,buf);
     return result;
 }
 
-char *call_red(char *args) {
+char *call_red(char *const *args) {
     return call_and_write_to_red(args, "");
 }
 
 void test_nothing_w_no_args() {
-    char args[] = "";
+    char *const args[] = {red_binary, NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result, "0\n"));
     free(result);
 }
 
 void test_one_int() {
-    char args[] = "test_files/one_int.txt";
+    char *const args[] = {red_binary, "test_files/one_int.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "1\n"));
     free(result);
 }
 
 void test_two_ints() {
-    char args[] = "test_files/two_ints.txt";
+    char *const args[] = {red_binary, "test_files/two_ints.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "7\n"));
     free(result);
 }
 
 void test_five_ints() {
-    char args[] = "test_files/five_ints.txt";
+    char *const args[] = {red_binary, "test_files/five_ints.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "15\n"));
     free(result);
 }
 
 void test_funky_line_breaks() {
-    char args[] = "test_files/funky_line_breaks.txt";
+    char *const args[] = {red_binary, "test_files/funky_line_breaks.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "30\n"));
     free(result);
 }
 
 void test_empty_file() {
-    char args[] = "test_files/empty.txt";
+    char *const args[] = {red_binary, "test_files/empty.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "0\n"));
     free(result);
 }
 
 void test_large_ints() {
-    char args[] = "test_files/large_ints.txt";
+    char *const args[] = {red_binary, "test_files/large_ints.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "5000000000\n"));
     free(result);
 }
 
 void test_negative_ints() {
-    char args[] = "test_files/negative_ints.txt";
+    char *const args[] = {red_binary, "test_files/negative_ints.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "-9\n"));
     free(result);
 }
 
 void test_two_files() {
-    char args[] = "test_files/file1.txt test_files/file2.txt";
+    char *const args[] = {red_binary, "test_files/file1.txt", "test_files/file2.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "0\n"));
     free(result);
 }
 
 void test_product_option() {
-    char args[] = "-p test_files/five_ints.txt";
+    char *const args[] = {red_binary, "-p", "test_files/five_ints.txt", NULL};
     char *result = call_red(args);
     assert(0 == strcmp(result , "120\n"));
     free(result);
 }
 
 /*void test_one_line_from_stdin() {*/
-/*char args[] = "test_files/five_ints.txt";*/
+/*char *const args[] = "test_files/five_ints.txt";*/
 /*char *result = call_and_write_to_red(args,"42\n");*/
 /*assert(0 == strcmp(result , "42\n"));*/
 /*free(result);*/
