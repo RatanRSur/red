@@ -9,6 +9,7 @@
     printf("%s\n", #fn_name);\
     fn_name();
 
+const int BUF_SIZE = 100;
 char red_binary[] = "./bin/red";
 
 char *call_and_write_to_red(char *const *args, const char *input) {
@@ -16,7 +17,10 @@ char *call_and_write_to_red(char *const *args, const char *input) {
     int read_pipe[2];
     pipe(write_pipe);
     pipe(read_pipe);
-    char buf[100];
+    char buf[BUF_SIZE];
+
+    for (int i = 0; i < BUF_SIZE; ++i) { buf[i] = 0; }
+
     pid_t pid = fork();
 
     if (pid) {
@@ -24,7 +28,7 @@ char *call_and_write_to_red(char *const *args, const char *input) {
         close(read_pipe[1]);
         write(write_pipe[1], input, strlen(input) + 1);
         close(write_pipe[1]);
-        read(read_pipe[0], buf, 10);
+        read(read_pipe[0], buf, BUF_SIZE);
         close(read_pipe[0]);
     } else {
         close(write_pipe[1]);
@@ -36,7 +40,7 @@ char *call_and_write_to_red(char *const *args, const char *input) {
     }
 
     char *result = (char *) calloc(strlen(buf) + 1, sizeof(char));
-    strcpy(result,buf);
+    strcpy(result, buf);
     return result;
 }
 
@@ -116,7 +120,7 @@ void test_product_option() {
 
 /*void test_one_line_from_stdin() {*/
 /*char *const args[] = "test_files/five_ints.txt";*/
-/*char *result = call_and_write_to_red(args,"42\n");*/
+/*char *result = call_and_write_to_red(args, "42\n");*/
 /*assert(0 == strcmp(result , "42\n"));*/
 /*free(result);*/
 /*}*/
