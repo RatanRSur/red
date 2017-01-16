@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -51,70 +52,100 @@ char *call_red(char *const *args) {
 void test_nothing_w_no_args() {
     char *const args[] = {red_binary, NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result, "0\n"));
+    bool failed = strcmp(result , "0\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_one_int() {
     char *const args[] = {red_binary, "test_files/one_int.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "1\n"));
+    bool failed = strcmp(result , "1\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_two_ints() {
     char *const args[] = {red_binary, "test_files/two_ints.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "7\n"));
+    bool failed = strcmp(result , "7\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_five_ints() {
     char *const args[] = {red_binary, "test_files/five_ints.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "15\n"));
+    bool failed = strcmp(result , "15\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_funky_line_breaks() {
     char *const args[] = {red_binary, "test_files/funky_line_breaks.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "30\n"));
+    bool failed = strcmp(result , "30\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_empty_file() {
     char *const args[] = {red_binary, "test_files/empty.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "0\n"));
+    bool failed = strcmp(result , "0\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_large_ints() {
     char *const args[] = {red_binary, "test_files/large_ints.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "5000000000\n"));
+    bool failed = strcmp(result , "5000000000\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_negative_ints() {
     char *const args[] = {red_binary, "test_files/negative_ints.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "-9\n"));
+    bool failed = strcmp(result , "-9\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_two_files() {
     char *const args[] = {red_binary, "test_files/file1.txt", "test_files/file2.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "0\n"));
+    bool failed = strcmp(result , "0\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
 void test_product_option() {
     char *const args[] = {red_binary, "-p", "test_files/five_ints.txt", NULL};
     char *result = call_red(args);
-    assert(0 == strcmp(result , "120\n"));
+    bool failed = strcmp(result , "120\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
     free(result);
 }
 
