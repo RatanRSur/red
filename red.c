@@ -80,7 +80,6 @@ int main(int argc, char **argv) {
         free(filename);
     }
 
-    printf("%lld", accumulator);
-    printf("\n");
+    printf("%lld\n", accumulator);
     return 0;
 }
