@@ -150,7 +150,7 @@ void test_product_option() {
 }
 
 void test_one_line_from_stdin() {
-    char *const args[] = {NULL};
+    char *const args[] = {red_binary, NULL};
     char *result = call_and_write_to_red(args, "42\n");
     bool failed = strcmp(result, "42\n");
 
@@ -160,7 +160,7 @@ void test_one_line_from_stdin() {
 }
 
 void test_multi_line_add_from_stdin() {
-    char *const args[] = {NULL};
+    char *const args[] = {red_binary, NULL};
     char *result = call_and_write_to_red(args, "10\n73\n99\n89\n53968\n8820\n5\n512\n484\n");
     bool failed = strcmp(result, "64060\n");
 
