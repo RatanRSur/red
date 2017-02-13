@@ -142,19 +142,22 @@ void test_two_files() {
 void test_product_option() {
     char *const args[] = {red_binary, "-p", "test_files/five_ints.txt", NULL};
     char *result = call_red(args);
-    bool failed = strcmp(result , "120\n");
+    bool failed = strcmp(result, "120\n");
 
     if (failed) {printf("Failed. result was >>%s", result); assert(false);}
 
     free(result);
 }
 
-/*void test_one_line_from_stdin() {*/
-/*char *const args[] = "test_files/five_ints.txt";*/
-/*char *result = call_and_write_to_red(args, "42\n");*/
-/*assert(0 == strcmp(result , "42\n"));*/
-/*free(result);*/
-/*}*/
+void test_one_line_from_stdin() {
+    char *const args[] = {NULL};
+    char *result = call_and_write_to_red(args, "42\n");
+    bool failed = strcmp(result, "42\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
+    free(result);
+}
 
 int main() {
     run_test(test_nothing_w_no_args);
@@ -167,7 +170,7 @@ int main() {
     run_test(test_negative_ints);
     run_test(test_two_files);
     run_test(test_product_option);
-    /*run_test(test_one_line_from_stdin);*/
+    run_test(test_one_line_from_stdin);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }

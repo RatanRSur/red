@@ -50,17 +50,19 @@ int main(int argc, char **argv) {
         mode = (char) c;
     }
 
-    int64_t accumulator;
+    int64_t identity;
 
     switch (mode) {
     case 's':
-        accumulator = 0;
+        identity = 0;
         break;
 
     case 'p':
-        accumulator = 1;
+        identity = 1;
         break;
     }
+
+    int64_t accumulator = identity;
 
     for (int i = optind; i < argc; ++i) {
         char *filename = (char *) calloc(strlen(argv[i]) + 1, 1);
@@ -78,6 +80,18 @@ int main(int argc, char **argv) {
         }
 
         free(filename);
+    }
+
+    int64_t current = identity;
+    scanf("%lld ", &current);
+    switch (mode) {
+    case 's':
+        accumulator += current;
+        break;
+
+    case 'p':
+        accumulator *= current;
+        break;
     }
 
     printf("%lld\n", accumulator);
