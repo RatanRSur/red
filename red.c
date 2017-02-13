@@ -83,15 +83,17 @@ int main(int argc, char **argv) {
     }
 
     int64_t current = identity;
-    scanf("%lld ", &current);
-    switch (mode) {
-    case 's':
-        accumulator += current;
-        break;
 
-    case 'p':
-        accumulator *= current;
-        break;
+    while (scanf("%lld ", &current)) {
+        switch (mode) {
+        case 's':
+            accumulator += current;
+            break;
+
+        case 'p':
+            accumulator *= current;
+            break;
+        }
     }
 
     printf("%lld\n", accumulator);

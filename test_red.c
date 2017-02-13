@@ -159,6 +159,16 @@ void test_one_line_from_stdin() {
     free(result);
 }
 
+void test_multi_line_add_from_stdin() {
+    char *const args[] = {NULL};
+    char *result = call_and_write_to_red(args, "10\n73\n99\n89\n53968\n8820\n5\n512\n484\n");
+    bool failed = strcmp(result, "64060\n");
+
+    if (failed) {printf("Failed. result was >>%s", result); assert(false);}
+
+    free(result);
+}
+
 int main() {
     run_test(test_nothing_w_no_args);
     run_test(test_one_int);
@@ -171,6 +181,7 @@ int main() {
     run_test(test_two_files);
     run_test(test_product_option);
     run_test(test_one_line_from_stdin);
+    run_test(test_multi_line_add_from_stdin);
     printf("%sPassing.%s\n", "\x1B[32m", "\x1B[0m");
     return 0;
 }
