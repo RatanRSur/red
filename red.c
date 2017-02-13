@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
 
     int64_t current = identity;
 
-    while (scanf("%lld ", &current)) {
+    while (scanf("%lld", &current) > 0) {
         switch (mode) {
         case 's':
             accumulator += current;
